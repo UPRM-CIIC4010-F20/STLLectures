@@ -18,14 +18,22 @@ class Student {
     string getLastName() { return lastName; }
     Student(int id, string fn, string ln): id(id), firstName(fn), lastName(ln) {}
 
-    // CLASS CODE HERE <
+    bool operator<(const Student &s2) const
+    {
+        return (this->getId() < s2.getId());
+    }
 
 };
 
 int countUnique(const vector<Student> &students)
 {
-    // CLASS CODE HERE
-    return 0;
+    set<Student> uniqueStudents;
+
+    for(Student s : students) {
+        uniqueStudents.insert(s);
+    }
+
+    return uniqueStudents.size();
 }
 
 int main() {

@@ -32,7 +32,23 @@ double apply (string operand, double v1, double v2)
 
 double eval(vector<string> expression)
 {
-    // CLASS CODE HERE
+    stack<double, vector<double> > exprStack;
+
+    for (string token : expression) {
+        switch(tokenType(token)) {
+            case OPERAND:
+                exprStack.push(stod(token));
+                break;
+            case OPERATOR:
+                double op2 = exprStack.top();
+                exprStack.pop();
+                double op1 = exprStack.top();
+                exprStack.pop();
+                exprStack.push(apply(token, op1, op2));
+                break;
+        }
+    }
+    return exprStack.top();
 }
 
 int main() {
