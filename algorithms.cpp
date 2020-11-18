@@ -6,6 +6,8 @@
 #include <list>
 #include <set>
 #include <algorithm>
+#include <functional>
+#include <math.h>
 
 using namespace std;
 
@@ -57,6 +59,26 @@ public:
         }
     }
 };
+
+bool orderByLastName(Student s1, Student s2) 
+{
+    return (s1.getLastName().compare(s2.getLastName()) < 0);
+}
+
+double integrate(double a, double b, function<double(double)> f)
+{
+
+    int intervals = 1000;
+    double deltaX = (b-a)/intervals;
+    double result =0;
+    for(int i=0; i<intervals; i++) {
+        double xi = a + i * deltaX;
+        double nextHeight = (f(xi) + f(xi+deltaX)) / 2.0;
+        double nextArea = nextHeight * deltaX;
+        result += nextArea;
+    }
+    return result;
+}
 
 int main()
 {
@@ -112,6 +134,41 @@ int main()
     cout << "First student with an even id is: " << pos->getFirstName() << endl;
     pos = find_if(pos+1, testStudents.end(), evenIdFunction);
     cout << "Second student with an even id is: " << pos->getFirstName() << endl;
+
+    cout << "Sorting Examples" << endl;
+    cout << "Using operator < from element type" << endl;
+    random_shuffle(testStudents.begin(), testStudents.end());
+    sort(testStudents.begin(), testStudents.end());
+
+
+    cout << "Using operator comparator standalone function" << endl;
+    random_shuffle(testStudents.begin(), testStudents.end());
+    sort(testStudents.begin(), testStudents.end(), orderByLastName);
+
+    cout << "Using comparator class" << endl;
+    // Exercise for students
+
+    cout << "Using lambda expression" << endl;
+    random_shuffle(testStudents.begin(), testStudents.end());
+    sort(testStudents.begin(), testStudents.end(),
+         [](Student s1, Student s2) {
+             return (s1.getFirstName().compare(s2.getFirstName()) < 0);
+         });
+
+    // cout << "Numerical Integration Examples" << endl;
+    cout << "Integral of f(x)=e^x^2 from 0 to 1 is: " 
+        << integrate(0,1,[](double x) { return exp(x*x);}) << endl;
+    cout << "Integral of f(x)=e^x^2 from 0 to 1 is: " 
+        << integrate(0,1,[](double x) { return exp(x*x);}) << endl;
+    cout << "Integral of f(x)= from 0 to 1 is: " 
+        << integrate(2,4,[](double x) { return x*x*pow(sin(x),3);}) << endl;
+    cout << "Integral of f(x)=sin^2(x)... from 0 to 1 is: " 
+        << integrate(0,M_PI,
+        [](double x) 
+        { 
+            return pow(sin(x),2)+2*pow(sin(2*x),4);
+        }
+        ) << endl;
 
 
 }
